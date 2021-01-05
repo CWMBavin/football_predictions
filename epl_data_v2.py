@@ -35,30 +35,6 @@ def team_names():
     return teams
 
 
-teams = {
-    'Arsenal': ('Arsenal', 'ars'),
-    'Aston Villa': ('Aston Villa', 'ast'),
-    'Brighton': ('Brighton', 'bri'),
-    'Burnley': ('Burnley', 'bur'),
-    'Chelsea': ('Chelsea', 'che'),
-    'Crystal Palace': ('Crystal Palace', 'cry'),
-    'Everton': ('Everton', 'eve'),
-    'Fulham': ('Fulham', 'ful'),
-    'Leeds': ('Leeds', 'lee'),
-    'Leicester': ('Leicester', 'lei'),
-    'Liverpool': ('Liverpool', 'liv'),
-    'Man United': ('Man United', 'mun'),
-    'Man City': ('Man City', 'mci'),
-    'Newcastle': ('Newcastle', 'new'),
-    'Sheffield': ('Sheffield United', 'she'),
-    'Southampton': ('Southampton', 'sou'),
-    'Tottenham': ('Tottenham', 'tot'),
-    'West Brom': ('West Brom', 'wbr'),
-    'West Ham': ('West Ham', 'whu'),
-    'Wolves': ('Wolves', 'wol')
-}
-
-
 def referees(ref):
     epl_data = csv.reader(lines)
     yellow = []

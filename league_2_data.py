@@ -4,7 +4,8 @@ import requests
 import pdb
 import math
 
-link = "https://www.football-data.co.uk/mmz4281/2021/E1.csv"
+ext = 'E3'
+link = "https://www.football-data.co.uk/mmz4281/2021/" + ext + ".csv"
 response = urllib.request.urlopen(link)
 lines = [line.decode('utf-8') for line in response.readlines()]
 
@@ -53,7 +54,7 @@ def mean_data():
     home_corners = []
     away_corners = []
     for row in league_data:
-        if row[0] == 'E1':
+        if row[0] == ext:
             home_goals.append(int(row[5]))
             away_goals.append(int(row[6]))
             y = int(row[20]) + int(row[21])
@@ -95,7 +96,7 @@ def team_ranking(team):
     away_goals = []
     away_conc = []
     for row in league_data:
-        if row[0] == 'E1':
+        if row[0] == ext:
             if row[3] == team:
                 home_goals.append(int(row[5]))
                 home_conc.append(int(row[6]))
@@ -142,7 +143,7 @@ def team_data(home, away):
     away_corners = []
     away_corners_conc = []
     for row in league_data:
-        if row[0] == 'E1':
+        if row[0] == ext:
             if row[3] == home:
                 home_goals.append(int(row[5])/(team_ranking(away)[3]))
                 home_conc.append(int(row[6])/(team_ranking(away)[2]))

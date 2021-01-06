@@ -4,7 +4,7 @@ import requests
 import pdb
 import math
 
-ext = 'E0'
+ext = 'E2'
 link = "https://www.football-data.co.uk/mmz4281/2021/" + ext + ".csv"
 response = urllib.request.urlopen(link)
 lines = [line.decode('utf-8') for line in response.readlines()]
@@ -23,17 +23,6 @@ def mean(i):
     """
     mean_i = sum(i) / len(i)
     return two_decimals(mean_i)
-
-
-# def team_names():
-#     league_data = csv.reader(lines)
-#     teams = []
-#     for row in league_data:
-#         if row[0] == ext:
-#             teams.append(row[3])
-#             teams.append(row[4])
-#     teams = sorted(list(set(teams)))
-#     return teams
 
 
 def referees(ref):
@@ -247,4 +236,3 @@ def team_data(home, away):
             away_yellow_against_mean,
             home_xc,
             away_xc]
-

@@ -4,7 +4,7 @@ import requests
 import pdb
 import math
 
-link = "https://www.football-data.co.uk/mmz4281/2021/E0.csv"
+link = "https://www.football-data.co.uk/mmz4281/2021/E1.csv"
 response = urllib.request.urlopen(link)
 lines = [line.decode('utf-8') for line in response.readlines()]
 
@@ -22,17 +22,6 @@ def mean(i):
     """
     mean_i = sum(i) / len(i)
     return two_decimals(mean_i)
-
-
-def team_names():
-    league_data = csv.reader(lines)
-    teams = []
-    for row in league_data:
-        if row[0] == 'E0':
-            teams.append(row[3])
-            teams.append(row[4])
-    teams = sorted(list(set(teams)))
-    return teams
 
 
 def referees(ref):
@@ -64,7 +53,7 @@ def mean_data():
     home_corners = []
     away_corners = []
     for row in league_data:
-        if row[0] == 'E0':
+        if row[0] == 'E1':
             home_goals.append(int(row[5]))
             away_goals.append(int(row[6]))
             y = int(row[20]) + int(row[21])
@@ -106,7 +95,7 @@ def team_ranking(team):
     away_goals = []
     away_conc = []
     for row in league_data:
-        if row[0] == 'E0':
+        if row[0] == 'E1':
             if row[3] == team:
                 home_goals.append(int(row[5]))
                 home_conc.append(int(row[6]))
@@ -153,7 +142,7 @@ def team_data(home, away):
     away_corners = []
     away_corners_conc = []
     for row in league_data:
-        if row[0] == 'E0':
+        if row[0] == 'E1':
             if row[3] == home:
                 home_goals.append(int(row[5])/(team_ranking(away)[3]))
                 home_conc.append(int(row[6])/(team_ranking(away)[2]))
@@ -246,4 +235,3 @@ def team_data(home, away):
             away_yellow_against_mean,
             home_xc,
             away_xc]
-

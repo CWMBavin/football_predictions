@@ -4,10 +4,10 @@ Created on Sun Nov  8 17:30:51 2020
 
 @author: CWMBavin
 """
-import results as res
+from redundant_files import results as res
 import math
-from results import mean
-from results import two_decimals
+from redundant_files.results import mean
+from redundant_files.results import two_decimals
 
 
 overall = {

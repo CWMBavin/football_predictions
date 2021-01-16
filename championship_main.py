@@ -1,4 +1,4 @@
-import league_2_data as data
+import championship_data as data
 import math
 import pdb
 

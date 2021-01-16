@@ -156,8 +156,8 @@ def team_data(home, away):
     for row in league_data:
         if row[0] == ext:
             if row[3] == home:
-                home_goals.append(int(row[5])/(team_ranking(away)[3]))
-                home_conc.append(int(row[6])/(team_ranking(away)[2]))
+                home_goals.append(int(row[5])/(team_ranking(row[4])[3]))
+                home_conc.append(int(row[6])/(team_ranking(row[4])[2]))
                 home_yellow.append(int(row[20]))
                 home_yellow_against.append(int(row[21]))
                 home_shots.append(int(row[12]))
@@ -170,17 +170,17 @@ def team_data(home, away):
                 home_yellow.append(int(row[21]))
                 home_yellow_against.append(int(row[20]))
             if row[3] == away:
-                away_yellow.append(int(row[21]))
-                away_yellow_against.append(int(row[20]))
-            elif row[4] == away:
-                away_goals.append(int(row[5]) / (team_ranking(home)[1]))
-                away_conc.append(int(row[6]) / (team_ranking(home)[0]))
                 away_yellow.append(int(row[20]))
                 away_yellow_against.append(int(row[21]))
-                away_shots.append(int(row[12]))
-                away_shots_conc.append(int(row[13]))
-                away_shots_target.append(int(row[14]))
-                away_shots_target_conc.append(int(row[15]))
+            elif row[4] == away:
+                away_goals.append(int(row[6]) / (team_ranking(row[3])[1]))
+                away_conc.append(int(row[5]) / (team_ranking(row[3])[0]))
+                away_yellow.append(int(row[21]))
+                away_yellow_against.append(int(row[20]))
+                away_shots.append(int(row[13]))
+                away_shots_conc.append(int(row[12]))
+                away_shots_target.append(int(row[15]))
+                away_shots_target_conc.append(int(row[14]))
                 away_corners.append(int(row[19]))
                 away_corners_conc.append(int(row[18]))
 
@@ -211,8 +211,8 @@ def team_data(home, away):
     away_att = away_goals_mean / mean_data()[1]
     away_def = away_conc_mean / mean_data()[0]
 
-    home_goals = two_decimals(home_att * away_def * mean_data()[0])
-    away_goals = two_decimals(away_att * home_def * mean_data()[1])
+    home_g = two_decimals(home_att * away_def * mean_data()[0])
+    away_g = two_decimals(away_att * home_def * mean_data()[1])
 
     home_s = home_shots_mean / mean_data()[4]
     home_s_conc = home_shots_conc_mean / mean_data()[5]
@@ -234,9 +234,8 @@ def team_data(home, away):
     away_xc = two_decimals((away_corners_mean / mean_data()[9]) *
                            (home_corners_conc_mean / mean_data()[9]) *
                            (mean_data()[9]))
-
-    return [home_goals,
-            away_goals,
+    return [home_g,
+            away_g,
             home_xs,
             home_xsot,
             away_xs,
@@ -247,4 +246,3 @@ def team_data(home, away):
             away_yellow_against_mean,
             home_xc,
             away_xc]
-

@@ -108,8 +108,7 @@ while True:
             home_yellow_overall = data.two_decimals(home_y * away_y_a * ref_y * mean_yellow)
             away_yellow_overall = data.two_decimals(away_y * home_y_a * ref_y * mean_yellow)
 
-            print(f"\n"
-                  f"        {team1} Yellows: {home_yellow_overall}\n"
+            print(f"        {team1} Yellows: {home_yellow_overall}\n"
                   f"        {team2} Yellows: {away_yellow_overall}\n"
                   f"        ")
 

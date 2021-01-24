@@ -1,11 +1,40 @@
-import epl_data_v2 as data
 import math
 import pdb
+import tkinter as tk
+from tkinter import ttk
+import epl_data_v2 as data
+
+teams = data.team_names()
+refs = data.referee_names()
 
 while True:
-    team1 = input('\n'
-                  'Home Team: ')
-    team2 = input('Away Team: ')
+    app = tk.Tk()
+    app.title('Pick variables for football model')
+    app.geometry('400x200')
+
+    variable1 = tk.StringVar(app)
+    variable1.set(teams[0])
+    variable2 = tk.StringVar(app)
+    variable2.set(teams[0])
+    variable3 = tk.StringVar(app)
+    variable3.set(refs[0])
+
+    home_team = tk.OptionMenu(app, variable1, *teams)
+    home_team.config(width=90, font=('Helvetica', 22))
+    home_team.pack()
+
+    away_team = tk.OptionMenu(app, variable2, *teams)
+    away_team.config(width=90, font=('Helvetica', 22))
+    away_team.pack()
+
+    referee = tk.OptionMenu(app, variable3, *refs)
+    referee.config(width=90, font=('Helvetica', 22))
+    referee.pack()
+
+    app.mainloop()
+
+    team1 = variable1.get()
+    team2 = variable2.get()
     try:
         # Home and Away Goals
         home_goals = data.team_data(team1, team2)[0]
@@ -62,7 +91,7 @@ while True:
               f"        ")
 
         # Home and Away Cards
-        ref = input('Referee: ')
+        ref = variable3.get()
         try:
             mean_yellow = data.mean_data()[2]/2
             ref_yellow = data.referees(ref)[0]/2
@@ -80,8 +109,7 @@ while True:
             home_yellow_overall = data.two_decimals(home_y * away_y_a * ref_y * mean_yellow)
             away_yellow_overall = data.two_decimals(away_y * home_y_a * ref_y * mean_yellow)
 
-            print(f"\n"
-                  f"        {team1} Yellows: {home_yellow_overall}\n"
+            print(f"        {team1} Yellows: {home_yellow_overall}\n"
                   f"        {team2} Yellows: {away_yellow_overall}\n"
                   f"        ")
 

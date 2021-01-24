@@ -25,15 +25,25 @@ def mean(i):
     return two_decimals(mean_i)
 
 
-# def team_names():
-#     league_data = csv.reader(lines)
-#     teams = []
-#     for row in league_data:
-#         if row[0] == ext:
-#             teams.append(row[3])
-#             teams.append(row[4])
-#     teams = sorted(list(set(teams)))
-#     return teams
+def team_names():
+    league_data = csv.reader(lines)
+    teams = []
+    for row in league_data:
+        if row[0] == ext:
+            teams.append(row[3])
+            teams.append(row[4])
+    teams = sorted(list(set(teams)))
+    return teams
+
+
+def referee_names():
+    league_data = csv.reader(lines)
+    refs = []
+    for row in league_data:
+        if row[0] == ext:
+            refs.append(row[11])
+    refs = sorted(list(set(refs)))
+    return refs
 
 
 def referees(ref):

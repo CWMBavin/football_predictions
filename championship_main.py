@@ -1,6 +1,7 @@
 import championship_data as data
 import math
 import tkinter as tk
+from tkinter import messagebox
 import pdb
 
 teams = data.team_names()
@@ -91,34 +92,37 @@ while True:
 
         # Home and Away Cards
         ref = variable3.get()
-        try:
-            mean_yellow = data.mean_data()[2]/2
-            ref_yellow = data.referees(ref)[0]/2
-            home_yellow = data.team_data(team1, team2)[6]
-            home_yellow_against = data.team_data(team1, team2)[7]
-            away_yellow = data.team_data(team1, team2)[8]
-            away_yellow_against = data.team_data(team1, team2)[9]
-
-            home_y = home_yellow/mean_yellow
-            home_y_a = home_yellow_against/mean_yellow
-            away_y = away_yellow/mean_yellow
-            away_y_a = away_yellow_against/mean_yellow
-            ref_y = ref_yellow/mean_yellow
-
-            home_yellow_overall = data.two_decimals(home_y * away_y_a * ref_y * mean_yellow)
-            away_yellow_overall = data.two_decimals(away_y * home_y_a * ref_y * mean_yellow)
-
-            print(f"        {team1} Yellows: {home_yellow_overall}\n"
-                  f"        {team2} Yellows: {away_yellow_overall}\n"
-                  f"        ")
-
-        except ZeroDivisionError:
+        if ref == 'N/A':
             pass
+        else:
+            try:
+                mean_yellow = data.mean_data()[2]/2
+                ref_yellow = data.referees(ref)[0]/2
+                home_yellow = data.team_data(team1, team2)[6]
+                home_yellow_against = data.team_data(team1, team2)[7]
+                away_yellow = data.team_data(team1, team2)[8]
+                away_yellow_against = data.team_data(team1, team2)[9]
 
-        again = input('Another match? Y/N: ')
-        if again == 'Y':
+                home_y = home_yellow/mean_yellow
+                home_y_a = home_yellow_against/mean_yellow
+                away_y = away_yellow/mean_yellow
+                away_y_a = away_yellow_against/mean_yellow
+                ref_y = ref_yellow/mean_yellow
+
+                home_yellow_overall = data.two_decimals(home_y * away_y_a * ref_y * mean_yellow)
+                away_yellow_overall = data.two_decimals(away_y * home_y_a * ref_y * mean_yellow)
+
+                print(f"        {team1} Yellows: {home_yellow_overall}\n"
+                      f"        {team2} Yellows: {away_yellow_overall}\n"
+                      f"        ")
+
+            except ZeroDivisionError:
+                pass
+
+        another_match = messagebox.askquestion(title='Continue?', message='Do you want to add another match?')
+        if another_match == 'yes':
             continue
-        elif again == 'N':
+        else:
             break
         break
 

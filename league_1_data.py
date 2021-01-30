@@ -43,6 +43,7 @@ def referee_names():
         if row[0] == ext:
             refs.append(row[11])
     refs = sorted(list(set(refs)))
+    refs.insert(0, 'N/A')
     return refs
 
 

@@ -1,8 +1,7 @@
-import league_2_data as data
+from active_files import league_1_data as data
 import math
 import tkinter as tk
 from tkinter import messagebox
-import pdb
 
 teams = data.team_names()
 refs = data.referee_names()

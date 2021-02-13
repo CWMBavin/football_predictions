@@ -1,7 +1,4 @@
-import tkinter as tk
-from tkinter import ttk
 from tkinter import messagebox
-import epl_data_v2 as data
 
 # teams = data.team_names()
 # refs = data.referee_names()

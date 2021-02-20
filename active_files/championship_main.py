@@ -123,7 +123,6 @@ while True:
             continue
         else:
             break
-        break
 
     except KeyError:
         print('Try again')

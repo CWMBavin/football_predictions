@@ -1,12 +1,7 @@
+from active_files import epl_data_v2 as data
 import math
 import tkinter as tk
 from tkinter import messagebox
-
-x = 1
-if x == 1:
-    from active_files import epl_data_v2 as data, league_1_data as data
-elif x == 2:
-    pass
 
 teams = data.team_names()
 refs = data.referee_names()
@@ -128,7 +123,6 @@ while True:
             continue
         else:
             break
-        break
 
     except KeyError:
         print('Try again')

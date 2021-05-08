@@ -1,7 +1,8 @@
-from active_files import epl_data_v2 as data
+from active_files import epl_data_v3 as data
 import math
 import tkinter as tk
 from tkinter import messagebox
+import pdb
 
 teams = data.team_names()
 refs = data.referee_names()
@@ -13,7 +14,7 @@ while True:
 
     variable1 = tk.StringVar(app)
     variable1.set(teams[0])
-    variable2 = tk.StringVar(app) 
+    variable2 = tk.StringVar(app)
     variable2.set(teams[0])
     variable3 = tk.StringVar(app)
     variable3.set(refs[0])

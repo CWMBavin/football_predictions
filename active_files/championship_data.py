@@ -3,17 +3,20 @@ import csv
 import requests
 import pdb
 import math
+import pandas as pd
 
 ext = 'E1'
 link = "https://www.football-data.co.uk/mmz4281/2021/" + ext + ".csv"
-response = urllib.request.urlopen(link)
-lines = [line.decode('utf-8') for line in response.readlines()]
+df = pd.read_csv(link)
+df = df.iloc[:,:-82]
+
 
 
 def two_decimals(i):
     """
     Returns a floating point to two decimal places
     """
+
     return float("{:.2f}".format(i))
 
 
@@ -22,40 +25,36 @@ def mean(i):
     Outputs the mean of list, i
     """
     mean_i = sum(i) / len(i)
+
     return two_decimals(mean_i)
 
 
 def team_names():
-    league_data = csv.reader(lines)
     teams = []
-    for row in league_data:
-        if row[0] == ext:
-            teams.append(row[3])
-            teams.append(row[4])
+    teams.extend(df['HomeTeam'].tolist())
+    teams.extend(df['AwayTeam'].tolist())
     teams = sorted(list(set(teams)))
+
     return teams
 
 
 def referee_names():
-    league_data = csv.reader(lines)
     refs = []
-    for row in league_data:
-        if row[0] == ext:
-            refs.append(row[11])
+    refs.extend(df['Referee'].tolist())
     refs = sorted(list(set(refs)))
     refs.insert(0, 'N/A')
+
     return refs
 
 
 def referees(ref):
-    league_data = csv.reader(lines)
     yellow = []
     red = []
-    for row in league_data:
-        if row[11] == str(ref):
-            y = int(row[20]) + int(row[21])
+    for i in df.index:
+        if df['Referee'][i] == ref:
+            y = df['HY'][i] + df['AY'][i]
             yellow.append(y)
-            r = int(row[22]) + int(row[23])
+            r = df['HR'][i] + df['AR'][i]
             red.append(r)
     yellow_mean = mean(yellow)
     red_mean = mean(red)
@@ -64,7 +63,6 @@ def referees(ref):
 
 
 def mean_data():
-    league_data = csv.reader(lines)
     home_goals = []
     away_goals = []
     yellow = []
@@ -75,20 +73,19 @@ def mean_data():
     away_shots_target = []
     home_corners = []
     away_corners = []
-    for row in league_data:
-        if row[0] == ext:
-            home_goals.append(int(row[5]))
-            away_goals.append(int(row[6]))
-            y = int(row[20]) + int(row[21])
-            yellow.append(y)
-            r = int(row[22]) + int(row[23])
-            red.append(r)
-            home_shots.append(int(row[12]))
-            away_shots.append(int(row[13]))
-            home_shots_target.append(int(row[14]))
-            away_shots_target.append(int(row[15]))
-            home_corners.append(int(row[18]))
-            away_corners.append(int(row[19]))
+    for i in df.index:
+        home_goals.append(int(df['FTHG'][i]))
+        away_goals.append(int(df['FTAG'][i]))
+        y = int(df['HY'][i]) + int(df['AY'][i])
+        yellow.append(y)
+        r = int(df['HR'][i]) + int(df['AR'][i])
+        red.append(r)
+        home_shots.append(int(df['HS'][i]))
+        away_shots.append(int(df['AS'][i]))
+        home_shots_target.append(int(df['HST'][i]))
+        away_shots_target.append(int(df['AST'][i]))
+        home_corners.append(int(df['HC'][i]))
+        away_corners.append(int(df['AC'][i]))
     home_goals_mean = mean(home_goals[-120:])
     away_goals_mean = mean(away_goals[-120:])
     yellow_mean = mean(yellow)
@@ -99,6 +96,7 @@ def mean_data():
     away_shots_target_mean = mean(away_shots_target[-120:])
     home_corners_mean = mean(home_corners[-120:])
     away_corners_mean = mean(away_corners[-120:])
+
     return [home_goals_mean,
             away_goals_mean,
             yellow_mean,
@@ -112,21 +110,17 @@ def mean_data():
 
 
 def team_ranking(team):
-    league_data = csv.reader(lines)
     home_goals = []
     home_conc = []
     away_goals = []
     away_conc = []
-    for row in league_data:
-        if row[0] == ext:
-            if row[3] == team:
-                home_goals.append(int(row[5]))
-                home_conc.append(int(row[6]))
-            elif row[4] == team:
-                away_goals.append(int(row[6]))
-                away_conc.append(int(row[5]))
-            else:
-                pass
+    for i in df.index:
+        if df['HomeTeam'][i] == team:
+            home_goals.append(int(df['FTHG'][i]))
+            home_conc.append(int(df['FTAG'][i]))
+        elif df['AwayTeam'][i] == team:
+            away_goals.append(int(df['FTAG'][i]))
+            away_conc.append(int(df['FTHG'][i]))
         else:
             pass
     home_att = math.sqrt((mean(home_goals[-6:])))/mean_data()[0]
@@ -134,6 +128,7 @@ def team_ranking(team):
     away_att = math.sqrt((mean(away_goals[-6:])))/mean_data()[1]
     away_def = math.sqrt((mean(away_conc[-6:])))/mean_data()[0]
     ranking = [home_att, home_def, away_att, away_def]
+
     return ranking
 
 
@@ -143,7 +138,6 @@ def team_data(home, away):
     :param away: away team
     :return: goals, shots, yellows, corners
     """
-    league_data = csv.reader(lines)
     home_goals = []
     home_conc = []
     away_goals = []
@@ -164,40 +158,35 @@ def team_data(home, away):
     home_corners_conc = []
     away_corners = []
     away_corners_conc = []
-    for row in league_data:
-        if row[0] == ext:
-            if row[3] == home:
-                home_goals.append(int(row[5]) / (team_ranking(row[4])[3])) if int(row[5]) > 0 and team_ranking(row[4])[
-                    3] > 0 else home_goals.append(int(row[5]))
-                home_conc.append(int(row[6]) / (team_ranking(row[4])[2])) if int(row[6]) > 0 and team_ranking(row[4])[
-                    2] > 0 else home_conc.append(int(row[6]))
-                home_yellow.append(int(row[20]))
-                home_yellow_against.append(int(row[21]))
-                home_shots.append(int(row[12]))
-                home_shots_conc.append(int(row[13]))
-                home_shots_target.append(int(row[14]))
-                home_shots_target_conc.append(int(row[15]))
-                home_corners.append(int(row[18]))
-                home_corners_conc.append(int(row[19]))
-            elif row[4] == home:
-                home_yellow.append(int(row[21]))
-                home_yellow_against.append(int(row[20]))
-            if row[3] == away:
-                away_yellow.append(int(row[20]))
-                away_yellow_against.append(int(row[21]))
-            elif row[4] == away:
-                away_goals.append(int(row[6]) / (team_ranking(row[3])[1])) if int(row[6]) > 0 and team_ranking(row[3])[
-                    1] > 0 else away_goals.append(int(row[6]))
-                away_conc.append(int(row[5]) / (team_ranking(row[3])[0])) if int(row[5]) > 0 and team_ranking(row[3])[
-                    0] > 0 else away_conc.append(int(row[5]))
-                away_yellow.append(int(row[21]))
-                away_yellow_against.append(int(row[20]))
-                away_shots.append(int(row[13]))
-                away_shots_conc.append(int(row[12]))
-                away_shots_target.append(int(row[15]))
-                away_shots_target_conc.append(int(row[14]))
-                away_corners.append(int(row[19]))
-                away_corners_conc.append(int(row[18]))
+    for i in df.index:
+        if df['HomeTeam'][i] == home:
+            home_goals.append(int(df['FTHG'][i])/(int(team_ranking(df['AwayTeam'][i])[3]))) if int(df['FTHG'][i])>0 and int(team_ranking(df['AwayTeam'][i])[3])>0 else home_goals.append(int(df['FTHG'][i]))
+            home_conc.append(int(df['FTAG'][i])/(int(team_ranking(df['AwayTeam'][i])[2]))) if int(df['FTAG'][i])>0 and int(team_ranking(df['AwayTeam'][i])[2])>0 else home_conc.append(int(df['FTAG'][i]))
+            home_yellow.append(int(df['HY'][i]))
+            home_yellow_against.append(int(df['AY'][i]))
+            home_shots.append(int(df['HS'][i]))
+            home_shots_conc.append(int(df['AS'][i]))
+            home_shots_target.append(int(df['HST'][i]))
+            home_shots_target_conc.append(int(df['AST'][i]))
+            home_corners.append(int(df['HC'][i]))
+            home_corners_conc.append(int(df['AC'][i]))
+        elif df['AwayTeam'][i] == home:
+            home_yellow.append(int(df['AY'][i]))
+            home_yellow_against.append(int(df['HY'][i]))
+        if df['HomeTeam'][i] == away:
+            away_yellow.append(int(df['HY'][i]))
+            away_yellow_against.append(int(df['AY'][i]))
+        elif df['AwayTeam'][i] == away:
+            away_goals.append(int(df['FTAG'][i])/(int(team_ranking(df['HomeTeam'][i])[1]))) if int(df['FTAG'][i])>0 and int(team_ranking(df['HomeTeam'][i])[1])>0 else away_goals.append(int(df['FTAG'][i]))
+            away_conc.append(int(df['FTHG'][i])/(int(team_ranking(df['HomeTeam'][i])[0]))) if int(df['FTHG'][i])>0 and int(team_ranking(df['HomeTeam'][i])[0])>0 else away_conc.append(int(df['FTHG'][i]))
+            away_yellow.append(int(df['AY'][i]))
+            away_yellow_against.append(int(df['HY'][i]))
+            away_shots.append(int(df['AS'][i]))
+            away_shots_conc.append(int(df['HS'][i]))
+            away_shots_target.append(int(df['AST'][i]))
+            away_shots_target_conc.append(int(df['HST'][i]))
+            away_corners.append(int(df['AC'][i]))
+            away_corners_conc.append(int(df['HC'][i]))
 
     home_goals_mean = mean(home_goals[-6:])
     home_conc_mean = mean(home_conc[-6:])
@@ -249,6 +238,7 @@ def team_data(home, away):
     away_xc = two_decimals((away_corners_mean / mean_data()[9]) *
                            (home_corners_conc_mean / mean_data()[9]) *
                            (mean_data()[9]))
+
     return [home_g,
             away_g,
             home_xs,

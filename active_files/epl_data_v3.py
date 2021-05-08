@@ -5,7 +5,7 @@ import pdb
 import math
 import pandas as pd
 
-ext = 'E3'
+ext = 'E0'
 link = "https://www.football-data.co.uk/mmz4281/2021/" + ext + ".csv"
 df = pd.read_csv(link)
 df = df.iloc[:,:-82]

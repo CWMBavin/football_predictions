@@ -11,7 +11,7 @@ time_now = datetime.now().strftime('%d-%m-%Y_%H-%M-%S')
 teams = data.team_names()
 refs = data.referee_names()
 
-file1 = open(f"C:\\Users\\cwmba\\OneDrive\\Pictures\\Desktop\\epl_" + time_now + ".txt", "w")
+file1 = open(f"C:\\Users\\cwmba\\Desktop\\epl_" + time_now + ".txt", "w")
 
 while True:
     app = tk.Tk()

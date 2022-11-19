@@ -2,9 +2,16 @@ from active_files import league_1_data as data
 import math
 import tkinter as tk
 from tkinter import messagebox
+from datetime import datetime
+import time
+import pdb
+
+time_now = datetime.now().strftime('%d-%m-%Y_%H-%M-%S')
 
 teams = data.team_names()
 refs = data.referee_names()
+
+file1 = open(f"C:\\Users\\cwmba\\Desktop\\league_1_" + time_now + ".txt", "w")
 
 while True:
     app = tk.Tk()
@@ -30,6 +37,9 @@ while True:
     referee.config(width=90, font=('Helvetica', 22))
     referee.pack()
 
+    app.lift()
+    app.attributes('-topmost', True)
+    app.after_idle(app.attributes, '-topmost', False)
     app.mainloop()
 
     team1 = variable1.get()
@@ -64,14 +74,32 @@ while True:
                     a_prob = ((e**(-1*home_goals))*((home_goals**h)/(math.factorial(h)))) * \
                              ((e**(-1*away_goals))*((away_goals**a)/(math.factorial(a))))
                     away_prob += a_prob
+        try:
+            home_perc_prob = data.two_decimals((home_prob * 100))
+            draw_perc_prob = data.two_decimals((draw_prob * 100))
+            away_perc_prob = data.two_decimals((away_prob * 100))
 
-        home_perc_prob = data.two_decimals((home_prob * 100))
-        draw_perc_prob = data.two_decimals((draw_prob * 100))
-        away_perc_prob = data.two_decimals((away_prob * 100))
+            home_odds = data.two_decimals((100/home_perc_prob)-1)
+            draw_odds = data.two_decimals((100/draw_perc_prob)-1)
+            away_odds = data.two_decimals((100/away_perc_prob)-1)
+        except ZeroDivisionError:
+            continue
 
-        home_odds = data.two_decimals((100/home_perc_prob)-1)
-        draw_odds = data.two_decimals((100/draw_perc_prob)-1)
-        away_odds = data.two_decimals((100/away_perc_prob)-1)
+        file1.write(
+              f"{team1} {data.two_decimals(home_goals)} - {data.two_decimals(away_goals)} {team2}\n"
+              f"\n"
+              f"{team1} Win: , {home_perc_prob} %, {home_odds}/1\n"
+              f"Draw: {draw_perc_prob} %, {draw_odds}/1\n"
+              f"{team2} Win: {away_perc_prob} %, {away_odds}/1\n"
+              f"\n"
+              f"{team1} Shots: {home_shots}\n"
+              f"{team1} SOTs: {home_shots_target}\n"
+              f"{team2} Shots: {away_shots}\n"
+              f"{team2} SOTs: {away_shots_target}\n"
+              f"\n"
+              f"{team1} Corners: {home_corners}\n"
+              f"{team2} Corners: {away_corners}\n"
+              f"\n")
 
         print(f"\n"
               f"        {team1} {data.two_decimals(home_goals)} - {data.two_decimals(away_goals)} {team2}\n"
@@ -111,9 +139,15 @@ while True:
                 home_yellow_overall = data.two_decimals(home_y * away_y_a * ref_y * mean_yellow)
                 away_yellow_overall = data.two_decimals(away_y * home_y_a * ref_y * mean_yellow)
 
+
+                file1.write(f"{team1} Yellows: {home_yellow_overall}\n"
+                            f"{team2} Yellows: {away_yellow_overall}\n"
+                            f"\n"
+                            f"\n")
+
                 print(f"        {team1} Yellows: {home_yellow_overall}\n"
                       f"        {team2} Yellows: {away_yellow_overall}\n"
-                      f"        ")
+                      f"")
 
             except ZeroDivisionError:
                 pass
@@ -123,8 +157,9 @@ while True:
             continue
         else:
             break
-        break
 
     except KeyError:
         print('Try again')
         continue
+
+file1.close()

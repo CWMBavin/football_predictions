@@ -1,4 +1,4 @@
-from active_files import epl_data_v3 as data
+import epl_data_v3 as data
 import math
 import tkinter as tk
 from tkinter import messagebox

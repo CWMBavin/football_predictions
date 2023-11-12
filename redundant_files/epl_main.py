@@ -11,7 +11,7 @@ time_now = datetime.now().strftime('%d-%m-%Y_%H-%M-%S')
 teams = data.team_names()
 refs = data.referee_names()
 
-file1 = open(f"C:\\Users\\cwmba\\OneDrive\\Pictures\\Desktop\\epl_" + time_now + ".txt", "w")
+file1 = open(f"C:\\Users\\cwmba\\Desktop\\epl_" + time_now + ".txt", "w")
 
 while True:
     app = tk.Tk()
@@ -37,6 +37,9 @@ while True:
     referee.config(width=90, font=('Helvetica', 22))
     referee.pack()
 
+    app.lift()
+    app.attributes('-topmost', True)
+    app.after_idle(app.attributes, '-topmost', False)
     app.mainloop()
 
     team1 = variable1.get()
@@ -135,6 +138,7 @@ while True:
 
                 home_yellow_overall = data.two_decimals(home_y * away_y_a * ref_y * mean_yellow)
                 away_yellow_overall = data.two_decimals(away_y * home_y_a * ref_y * mean_yellow)
+
 
                 file1.write(f"{team1} Yellows: {home_yellow_overall}\n"
                             f"{team2} Yellows: {away_yellow_overall}\n"
